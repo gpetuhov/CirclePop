@@ -10,21 +10,21 @@ import android.widget.Toast;
 
 // Background for circles
 public class DrawCircleView extends View {
-    Circle mCircle;
+    private Circle mCircle;
+    private Paint mPaint;
+    private Canvas mCanvas;
 
     public DrawCircleView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initPaint();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        mCircle = new Circle(300, 300, Circle.RED);
-        Paint paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(mCircle.getColor());
-        canvas.drawCircle(mCircle.getX(), mCircle.getY(), mCircle.getRadius(), paint);
+        mCanvas = canvas;
+        mCircle = new Circle(getWidth() / 2, getHeight() / 2, Circle.RED);
+        drawCircle(mCircle);
     }
 
     @Override
@@ -36,5 +36,16 @@ public class DrawCircleView extends View {
         }
 
         return true;
+    }
+
+    private void initPaint() {
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+        mPaint.setStyle(Paint.Style.FILL);
+    }
+
+    private void drawCircle(Circle circle) {
+        mPaint.setColor(mCircle.getColor());
+        mCanvas.drawCircle(circle.getX(), circle.getY(), circle.getRadius(), mPaint);
     }
 }
