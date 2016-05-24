@@ -2,6 +2,7 @@ package com.gpetuhov.android.circlepop;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 
 public class CircleActivity extends AppCompatActivity {
     private Circle mCircle;
