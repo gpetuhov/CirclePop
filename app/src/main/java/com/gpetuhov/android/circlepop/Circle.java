@@ -1,5 +1,6 @@
 package com.gpetuhov.android.circlepop;
 
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
@@ -18,6 +19,7 @@ public class Circle extends ImageView {
     public static final boolean GREEN = false;
     public static final int RADIUS = 100;
     public static final int MOVE_DURATION = 3000;
+    public static final int GREEN_CIRCLES_NUMBER = 2;
 
     private int x;  // initial coordinates
     private int y;
@@ -32,8 +34,13 @@ public class Circle extends ImageView {
     private int redNum; // Number of circles hit
     private int greenNum;
 
+    private int greenLeft; // Number of green circles left
+
+    private AnimatorSet mAnimatorSet;
+
     public Circle(Context context, AttributeSet attrs) {
         super(context, attrs);
+        greenLeft = GREEN_CIRCLES_NUMBER;
         initCoordinatesRange(context);
         initCircle();
     }
@@ -48,44 +55,60 @@ public class Circle extends ImageView {
     }
 
     private void initCircle() {
-        Random random = new Random();
+        if (greenLeft > 0) {
+            Random random = new Random();
 
-        x = random.nextInt(max_X);
-        y = random.nextInt(max_Y);
+            x = random.nextInt(max_X);
+            y = random.nextInt(max_Y);
 
-        setX(x);
-        setY(y);
+            setX(x);
+            setY(y);
 
-        dest_X = random.nextInt(max_X);
-        dest_Y = random.nextInt(max_Y);
+            dest_X = random.nextInt(max_X);
+            dest_Y = random.nextInt(max_Y);
 
-        int z = 1 + random.nextInt(10); // generate circle type (red or green)
-        mType = (z % 2) == 0;
+            int z = 1 + random.nextInt(10); // generate circle type (red or green)
+            mType = (z % 2) == 0;
 
-        if (mType == RED) {
-            setImageDrawable(getResources().getDrawable(R.drawable.red_circle));
+            if (mType == RED) {
+                setImageDrawable(getResources().getDrawable(R.drawable.red_circle));
+            }
+            if (mType == GREEN) {
+                greenLeft--;
+                setImageDrawable(getResources().getDrawable(R.drawable.green_circle));
+            }
+
+            startMovement();
+        } else {
+            gameEnd();
         }
-        if (mType == GREEN) {
-            setImageDrawable(getResources().getDrawable(R.drawable.green_circle));
-        }
+    }
 
-        startMovement();
+    private void gameEnd() {
+        Toast.makeText(getContext(), "You missed " + (GREEN_CIRCLES_NUMBER - greenNum) + " green circles!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            if (mType == RED) {
-                redNum++;
-            } else {
-                greenNum++;
-            }
-
-            Toast.makeText(getContext(), "Green = " + greenNum + ", Red = " + redNum, Toast.LENGTH_SHORT).show();
-            initCircle();
+            popCircle();
         }
 
         return true;
+    }
+
+    private void popCircle() {
+        stopMovement();
+    }
+
+    private void countHitScore() {
+        if (mType == RED) {
+            redNum++;
+        } else {
+            greenNum++;
+        }
+
+        Toast.makeText(getContext(), "Green = " + greenNum + ", Red = " + redNum, Toast.LENGTH_SHORT).show();
     }
 
     public void startMovement() {
@@ -97,10 +120,36 @@ public class Circle extends ImageView {
                 .setDuration(MOVE_DURATION);
         heightAnimator.setInterpolator(new AccelerateInterpolator());
 
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet
+        mAnimatorSet = new AnimatorSet();
+        mAnimatorSet
                 .play(widthAnimator)
                 .with(heightAnimator);
-        animatorSet.start();
+        mAnimatorSet.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                // onAnimationEnd is always called
+                initCircle();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                countHitScore();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        mAnimatorSet.start();
+    }
+
+    private void stopMovement() {
+        mAnimatorSet.cancel();
     }
 }
