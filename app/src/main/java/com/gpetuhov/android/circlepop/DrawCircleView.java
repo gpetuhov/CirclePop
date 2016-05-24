@@ -13,17 +13,19 @@ public class DrawCircleView extends View {
     private Circle mCircle;
     private Paint mPaint;
     private Canvas mCanvas;
+    private GameControl mGameControl;
 
     public DrawCircleView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initPaint();
+        mGameControl = new GameControl(this);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         mCanvas = canvas;
-        mCircle = new Circle(getWidth() / 2, getHeight() / 2, Circle.RED);
+        mCircle = Circle.getRandomCircle(getWidth(), getHeight());
         drawCircle(mCircle);
     }
 
@@ -32,6 +34,8 @@ public class DrawCircleView extends View {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             if (mCircle.isTargetHit(event.getX(), event.getY())) {
                 Toast.makeText(getContext(), "Target hit!", Toast.LENGTH_SHORT).show();
+
+                invalidate();
             }
         }
 
