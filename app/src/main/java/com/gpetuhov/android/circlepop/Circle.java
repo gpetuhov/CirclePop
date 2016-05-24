@@ -1,67 +1,69 @@
 package com.gpetuhov.android.circlepop;
 
-import android.graphics.Color;
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Point;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.Random;
 
-public class Circle {
-    public static final int RADIUS = 100;
+public class Circle extends ImageView {
     public static final boolean RED = true;
     public static final boolean GREEN = false;
+    public static final int RADIUS = 100;
 
     private int x;
     private int y;
-    private int radius = RADIUS;
     private boolean mType;  //true - RED; false - GREEN
-    private int mColor;
 
-    public Circle(int x, int y, boolean type) {
-        this.x = x;
-        this.y = y;
-        mType = type;
+    private int max_X;
+    private int max_Y;
+
+    public Circle(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initCoordinatesRange(context);
+        initCircle();
+    }
+
+    // Detect maximum X and Y
+    private void initCoordinatesRange(Context context) {
+        Point point = new Point();
+        ((Activity) context).getWindowManager().getDefaultDisplay().getSize(point);
+
+        max_X = point.x - RADIUS;
+        max_Y = point.y - RADIUS;
+    }
+
+    private void initCircle() {
+        Random random = new Random();
+
+        x = random.nextInt(max_X);
+        y = random.nextInt(max_Y);
+
+        setX(x);
+        setY(y);
+
+        int z = 1 + random.nextInt(10); // generate circle type (red or green)
+        mType = (z % 2) == 0;
+
         if (mType == RED) {
-            mColor = Color.RED;
-        } else {
-            mColor = Color.GREEN;
+            setImageDrawable(getResources().getDrawable(R.drawable.red_circle));
+        }
+        if (mType == GREEN) {
+            setImageDrawable(getResources().getDrawable(R.drawable.green_circle));
         }
     }
 
-    public int getX() {
-        return x;
-    }
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            Toast.makeText(getContext(), "Target Hit!", Toast.LENGTH_SHORT).show();
+            initCircle();
+        }
 
-    public int getY() {
-        return y;
-    }
-
-    public int getRadius() {
-        return radius;
-    }
-
-    public boolean getType() {
-        return mType;
-    }
-
-    public int getColor() {
-        return mColor;
-    }
-
-    public boolean isTargetHit(float eventX, float eventY) {
-        int distance; // distance of touch coordinates from circle center
-
-        // distance ^ 2 = (x - eventX) ^ 2 + (y - eventY) ^ 2
-        distance = (int) Math.sqrt(Math.pow(x - eventX,2) + Math.pow(y - eventY,2));
-        return distance <= radius;
-    }
-
-    public static Circle getRandomCircle(int max_X, int max_Y) {
-        Random random = new Random();
-        int x = random.nextInt(max_X);
-        int y = random.nextInt(max_Y);
-        int z = 1 + random.nextInt(10);
-        boolean type = (z % 2) == 0;
-        Circle circle = new Circle(x, y, type);
-        return circle;
+        return true;
     }
 }
