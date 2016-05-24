@@ -29,11 +29,11 @@ public class Circle extends ImageView {
     private int max_X;  // maximum coordinates
     private int max_Y;
 
-    private Score mScore;
+    private int redNum; // Number of circles hit
+    private int greenNum;
 
     public Circle(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mScore = Score.get(context);
         initCoordinatesRange(context);
         initCircle();
     }
@@ -76,12 +76,12 @@ public class Circle extends ImageView {
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             if (mType == RED) {
-                mScore.addRed();
+                redNum++;
             } else {
-                mScore.addGreen();
+                greenNum++;
             }
 
-            Toast.makeText(getContext(), "Green = " + mScore.getGreenNum() + ", Red = " + mScore.getRedNum(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Green = " + greenNum + ", Red = " + redNum, Toast.LENGTH_SHORT).show();
             initCircle();
         }
 
