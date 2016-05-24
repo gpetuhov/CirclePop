@@ -59,7 +59,7 @@ public class Circle {
         Random random = new Random();
         int x = random.nextInt(max_X);
         int y = random.nextInt(max_Y);
-        int z = random.nextInt(10);
+        int z = 1 + random.nextInt(10);
         boolean type = (z % 2) == 0;
         Circle circle = new Circle(x, y, type);
         return circle;

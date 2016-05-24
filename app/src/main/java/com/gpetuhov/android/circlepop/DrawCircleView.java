@@ -3,6 +3,7 @@ package com.gpetuhov.android.circlepop;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,12 +14,10 @@ public class DrawCircleView extends View {
     private Circle mCircle;
     private Paint mPaint;
     private Canvas mCanvas;
-    private GameControl mGameControl;
 
     public DrawCircleView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initPaint();
-        mGameControl = new GameControl(this);
     }
 
     @Override
@@ -26,7 +25,7 @@ public class DrawCircleView extends View {
         super.onDraw(canvas);
         mCanvas = canvas;
         mCircle = Circle.getRandomCircle(getWidth(), getHeight());
-        drawCircle(mCircle);
+        drawCircle();
     }
 
     @Override
@@ -48,8 +47,8 @@ public class DrawCircleView extends View {
         mPaint.setStyle(Paint.Style.FILL);
     }
 
-    private void drawCircle(Circle circle) {
+    private void drawCircle() {
         mPaint.setColor(mCircle.getColor());
-        mCanvas.drawCircle(circle.getX(), circle.getY(), circle.getRadius(), mPaint);
+        mCanvas.drawCircle(mCircle.getX(), mCircle.getY(), mCircle.getRadius(), mPaint);
     }
 }
