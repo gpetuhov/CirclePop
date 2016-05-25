@@ -18,8 +18,10 @@ public class Circle extends ImageView {
     public static final boolean RED = true;
     public static final boolean GREEN = false;
     public static final int RADIUS = 100;
-    public static final int MOVE_DURATION = 3000;
+    public static final int MAX_MOVE_DURATION = 3000;
     public static final int GREEN_CIRCLES_NUMBER = 2;
+    public static final int MAX_GREEN_CIRCLES_AFTER_ACCELERATION = 2;
+    public static final float ACCELERATION_INCREMENT = 0.5f;
 
     private int x;  // initial coordinates
     private int y;
@@ -36,6 +38,10 @@ public class Circle extends ImageView {
 
     private int greenLeft; // Number of green circles left
 
+    private int moveDuration;
+    private float moveDurationDivider;
+    private int greenNumAfterAcceleration;  // Number of green circles after acceleration
+
     private AnimatorSet mAnimatorSet;
 
     private PopSound mPopSound;
@@ -43,6 +49,9 @@ public class Circle extends ImageView {
     public Circle(Context context, AttributeSet attrs) {
         super(context, attrs);
         greenLeft = GREEN_CIRCLES_NUMBER;
+        moveDuration = MAX_MOVE_DURATION;
+        moveDurationDivider = 1;
+        greenNumAfterAcceleration = 0;
         mPopSound = new PopSound(context);
         initCoordinatesRange(context);
         initCircle();
@@ -58,7 +67,7 @@ public class Circle extends ImageView {
     }
 
     private void initCircle() {
-        if (greenLeft > 0) {
+        if (true /* greenLeft > 0 */) {
             Random random = new Random();
 
             x = random.nextInt(max_X);
@@ -78,6 +87,7 @@ public class Circle extends ImageView {
             }
             if (mType == GREEN) {
                 greenLeft--;
+                greenNumAfterAcceleration++;
                 setImageDrawable(getResources().getDrawable(R.drawable.green_circle));
             }
 
@@ -118,11 +128,11 @@ public class Circle extends ImageView {
 
     public void startMovement() {
         ObjectAnimator widthAnimator = ObjectAnimator.ofFloat(Circle.this, "x", x, dest_X)
-                .setDuration(MOVE_DURATION);
+                .setDuration(moveDuration);
         widthAnimator.setInterpolator(new AccelerateInterpolator());
 
         ObjectAnimator heightAnimator = ObjectAnimator.ofFloat(Circle.this, "y", y, dest_Y)
-                .setDuration(MOVE_DURATION);
+                .setDuration(moveDuration);
         heightAnimator.setInterpolator(new AccelerateInterpolator());
 
         mAnimatorSet = new AnimatorSet();
@@ -138,6 +148,7 @@ public class Circle extends ImageView {
             @Override
             public void onAnimationEnd(Animator animation) {
                 // onAnimationEnd is always called
+                initMoveDuration();
                 initCircle();
             }
 
@@ -156,5 +167,14 @@ public class Circle extends ImageView {
 
     private void stopMovement() {
         mAnimatorSet.cancel();
+    }
+
+    private void initMoveDuration() {
+        if (greenNumAfterAcceleration == MAX_GREEN_CIRCLES_AFTER_ACCELERATION) {
+            moveDurationDivider += ACCELERATION_INCREMENT;
+            greenNumAfterAcceleration = 0;
+        }
+
+        moveDuration = (int) (MAX_MOVE_DURATION / moveDurationDivider);
     }
 }
