@@ -52,6 +52,8 @@ public class Circle extends ImageView {
 
     private PopSound mPopSound; // Play circle pop sounds
 
+    private CircleActivity mCircleActivity;
+
     // Constructor for creating Circle programmatically
     public Circle(Context context) {
         this(context, null);
@@ -60,6 +62,7 @@ public class Circle extends ImageView {
     // Constructor for using Circle in XML
     public Circle(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mCircleActivity = (CircleActivity) context;
         greenMissedNum = 0;
         moveDuration = MAX_MOVE_DURATION;
         moveDurationDivider = 1;
@@ -119,13 +122,12 @@ public class Circle extends ImageView {
     // Game over
     private void gameEnd() {
         setVisibility(GONE);
+
         if (greenMissedNum == MAX_GREEN_MISSED) {
-            Toast.makeText(getContext(), "Game over: you missed " + greenMissedNum + " green circles!", Toast.LENGTH_SHORT).show();
-            Toast.makeText(getContext(), "Your score: Green = " + greenHitNum + ", Red = " + redHitNum, Toast.LENGTH_SHORT).show();
+            mCircleActivity.gameEndGreenMissed();
         }
         if (redHitNum == MAX_RED_HIT) {
-            Toast.makeText(getContext(), "Game over: you hit " + redHitNum + " red circles!", Toast.LENGTH_SHORT).show();
-            Toast.makeText(getContext(), "Your score: Green hit = " + greenHitNum + ", Green Missed = " + greenMissedNum, Toast.LENGTH_SHORT).show();
+            mCircleActivity.gameEndRedHit();
         }
     }
 
@@ -218,5 +220,17 @@ public class Circle extends ImageView {
         }
 
         moveDuration = (int) (MAX_MOVE_DURATION / moveDurationDivider);
+    }
+
+    public int getRedHitNum() {
+        return redHitNum;
+    }
+
+    public int getGreenHitNum() {
+        return greenHitNum;
+    }
+
+    public int getGreenMissedNum() {
+        return greenMissedNum;
     }
 }

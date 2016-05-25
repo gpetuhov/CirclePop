@@ -3,4 +3,6 @@
     <string name="intro_green">Pop green circles</string>
     <string name="intro_red">Avoid red circles</string>
     <string name="start_button">Start</string>
+    <string name="your_score">Your score:</string>
+    <string name="play_again_button">Play again</string>
 </resources>
