@@ -19,9 +19,12 @@ public class Circle extends ImageView {
     public static final boolean GREEN = false;
     public static final int RADIUS = 100;
     public static final int MAX_MOVE_DURATION = 3000;
-    public static final int GREEN_CIRCLES_NUMBER = 2;
-    public static final int MAX_GREEN_CIRCLES_AFTER_ACCELERATION = 2;
+    public static final int MAX_GREEN_CIRCLES_AFTER_ACCELERATION = 2;   // Move duration decreases every MAX_GREEN_CIRCLES_AFTER_ACCELERATION green circles
     public static final float ACCELERATION_INCREMENT = 0.5f;
+    public static final boolean CIRCLE_MISSED = false;
+    public static final boolean CIRCLE_HIT = true;
+    public static final int MAX_GREEN_MISSED = 3;
+    public static final int MAX_RED_HIT = 3;
 
     private int x;  // initial coordinates
     private int y;
@@ -33,14 +36,16 @@ public class Circle extends ImageView {
     private int max_X;  // maximum coordinates
     private int max_Y;
 
-    private int redNum; // Number of circles hit
-    private int greenNum;
+    private int redHitNum; // Number of circles hit
+    private int greenHitNum;
 
-    private int greenLeft; // Number of green circles left
+    private boolean circleHit;  // true - circle hit, false - circle missed
+
+    private int greenMissedNum;
 
     private int moveDuration;
     private float moveDurationDivider;
-    private int greenNumAfterAcceleration;  // Number of green circles after acceleration
+    private int greenNumAfterAcceleration;  // Number of green circles generated after acceleration
 
     private AnimatorSet mAnimatorSet;
 
@@ -48,7 +53,7 @@ public class Circle extends ImageView {
 
     public Circle(Context context, AttributeSet attrs) {
         super(context, attrs);
-        greenLeft = GREEN_CIRCLES_NUMBER;
+        greenMissedNum = 0;
         moveDuration = MAX_MOVE_DURATION;
         moveDurationDivider = 1;
         greenNumAfterAcceleration = 0;
@@ -67,7 +72,7 @@ public class Circle extends ImageView {
     }
 
     private void initCircle() {
-        if (true /* greenLeft > 0 */) {
+        if (greenMissedNum < MAX_GREEN_MISSED && redHitNum < MAX_RED_HIT) {
             Random random = new Random();
 
             x = random.nextInt(max_X);
@@ -86,10 +91,11 @@ public class Circle extends ImageView {
                 setImageDrawable(getResources().getDrawable(R.drawable.red_circle));
             }
             if (mType == GREEN) {
-                greenLeft--;
                 greenNumAfterAcceleration++;
                 setImageDrawable(getResources().getDrawable(R.drawable.green_circle));
             }
+
+            circleHit = CIRCLE_MISSED;
 
             startMovement();
         } else {
@@ -98,7 +104,15 @@ public class Circle extends ImageView {
     }
 
     private void gameEnd() {
-        Toast.makeText(getContext(), "You missed " + (GREEN_CIRCLES_NUMBER - greenNum) + " green circles!", Toast.LENGTH_SHORT).show();
+        setVisibility(GONE);
+        if (greenMissedNum == MAX_GREEN_MISSED) {
+            Toast.makeText(getContext(), "Game over: you missed " + greenMissedNum + " green circles!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Your score: Green = " + greenHitNum + ", Red = " + redHitNum, Toast.LENGTH_SHORT).show();
+        }
+        if (redHitNum == MAX_RED_HIT) {
+            Toast.makeText(getContext(), "Game over: you hit " + redHitNum + " red circles!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Your score: Green hit = " + greenHitNum + ", Green Missed = " + greenMissedNum, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -111,19 +125,24 @@ public class Circle extends ImageView {
     }
 
     private void popCircle() {
+        circleHit = CIRCLE_HIT;
         stopMovement();
     }
 
     private void countHitScore() {
         if (mType == RED) {
             mPopSound.redPop();
-            redNum++;
+            redHitNum++;
         } else {
             mPopSound.greenPop();
-            greenNum++;
+            greenHitNum++;
         }
+    }
 
-        Toast.makeText(getContext(), "Green = " + greenNum + ", Red = " + redNum, Toast.LENGTH_SHORT).show();
+    private void countMissScore() {
+        if (circleHit == CIRCLE_MISSED && mType == GREEN) {
+            greenMissedNum++;
+        }
     }
 
     public void startMovement() {
@@ -148,6 +167,7 @@ public class Circle extends ImageView {
             @Override
             public void onAnimationEnd(Animator animation) {
                 // onAnimationEnd is always called
+                countMissScore();
                 initMoveDuration();
                 initCircle();
             }
