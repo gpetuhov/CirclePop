@@ -1,5 +1,7 @@
 package com.gpetuhov.android.circlepop;
 
+import android.app.Activity;
+import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,24 +11,29 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class CircleActivity extends AppCompatActivity {
-    Circle mCircle;
+    private Circle mCircle;
 
-    LinearLayout mMainLayout;
+    private LinearLayout mMainLayout;
 
-    LinearLayout mIntroLayout;  // Intro screen
-    Button mStartButton;
+    private LinearLayout mIntroLayout;  // Intro screen
+    private Button mStartButton;
 
-    LinearLayout mScoreLayout;  // Your score screen
-    TextView mGameOverTextView;
-    TextView mGreenHitTextView;
-    TextView mGreenMissedTextView;
-    TextView mRedHitTextView;
-    Button mPlayAgainButton;
+    private LinearLayout mScoreLayout;  // Your score screen
+    private TextView mGameOverTextView;
+    private TextView mGreenHitTextView;
+    private TextView mGreenMissedTextView;
+    private TextView mRedHitTextView;
+    private Button mPlayAgainButton;
+
+    public int screenWidth;
+    public int screenHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_circle);
+
+        getScreenSize();
 
         mMainLayout = (LinearLayout) findViewById(R.id.main_layout);
 
@@ -37,9 +44,7 @@ public class CircleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mIntroLayout.setVisibility(View.GONE);  // Hide intro screen
-
-                mCircle = new Circle(CircleActivity.this);  // Create circle
-                mMainLayout.addView(mCircle);               // Add circle to main layout
+                createCircle();
             }
         });
 
@@ -55,11 +60,25 @@ public class CircleActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mScoreLayout.setVisibility(View.GONE);
                 mMainLayout.removeView(mCircle);
-
-                mCircle = new Circle(CircleActivity.this);
-                mMainLayout.addView(mCircle);
+                createCircle();
             }
         });
+    }
+
+    // Create circle and add to main layout
+    private void createCircle() {
+        mCircle = new Circle(CircleActivity.this);  // Create circle
+        mCircle.setVisibility(View.INVISIBLE);      // Make circle invisible until fully initialized
+        mMainLayout.addView(mCircle);               // Add circle to main layout
+    }
+
+    // Calculate screen size
+    private void getScreenSize() {
+        Point point = new Point();  // Stores screen size
+        getWindowManager().getDefaultDisplay().getSize(point); // Get screen size
+
+        screenWidth = point.x;
+        screenHeight = point.y;
     }
 
     public void gameEndGreenMissed() {

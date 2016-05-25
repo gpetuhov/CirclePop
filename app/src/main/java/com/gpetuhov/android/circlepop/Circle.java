@@ -63,22 +63,24 @@ public class Circle extends ImageView {
     public Circle(Context context, AttributeSet attrs) {
         super(context, attrs);
         mCircleActivity = (CircleActivity) context;
+
+        // Set circle diameter (ImageView width and height)
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(RADIUS * 2, RADIUS * 2);
+        setLayoutParams(params);
+
+        initCoordinatesRange();
         greenMissedNum = 0;
         moveDuration = MAX_MOVE_DURATION;
         moveDurationDivider = 1;
         greenNumAfterAcceleration = 0;
         mPopSound = new PopSound(context);
-        initCoordinatesRange(context);
         initCircle();
     }
 
     // Detect maximum X and Y
-    private void initCoordinatesRange(Context context) {
-        Point point = new Point();  // Stores screen size
-        ((Activity) context).getWindowManager().getDefaultDisplay().getSize(point); // Get screen size
-
-        max_X = point.x - (RADIUS * 2); // Calculate maximum coordinates so that circle doesn't fall out from screen
-        max_Y = point.y - (RADIUS * 2);
+    private void initCoordinatesRange() {
+        max_X = mCircleActivity.screenWidth - (RADIUS * 2); // Calculate maximum coordinates so that circle doesn't fall out from screen
+        max_Y = mCircleActivity.screenHeight - (RADIUS * 2);
     }
 
     // Initialize new circle
@@ -98,10 +100,6 @@ public class Circle extends ImageView {
             int z = 1 + random.nextInt(10); // Generate circle type (red or green)
             mType = (z % 2) == 0;
 
-            // Set circle diameter (ImageView width and height)
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(RADIUS * 2, RADIUS * 2);
-            setLayoutParams(params);
-
             // Set circle color
             if (mType == RED) {
                 setImageDrawable(getResources().getDrawable(R.drawable.red_circle));
@@ -113,6 +111,7 @@ public class Circle extends ImageView {
 
             circleHit = CIRCLE_MISSED;  // Initially circle is missed
 
+            setVisibility(VISIBLE);
             startMovement();
         } else {
             gameEnd();
