@@ -5,7 +5,10 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Point;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.animation.AccelerateInterpolator;
@@ -37,12 +40,19 @@ public class Circle extends ImageView {
     private int greenLeft; // Number of green circles left
 
     private AnimatorSet mAnimatorSet;
+    private SoundPool mSoundPool;
+
+    private int greenSoundId;
+    private int redSoundId;
 
     public Circle(Context context, AttributeSet attrs) {
         super(context, attrs);
         greenLeft = GREEN_CIRCLES_NUMBER;
         initCoordinatesRange(context);
         initCircle();
+        mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+        greenSoundId = mSoundPool.load(context, R.raw.green_pop, 1);
+        redSoundId = mSoundPool.load(context, R.raw.red_pop, 1);
     }
 
     // Detect maximum X and Y
@@ -103,8 +113,10 @@ public class Circle extends ImageView {
 
     private void countHitScore() {
         if (mType == RED) {
+            mSoundPool.play(redSoundId, 1.0f, 1.0f, 1, 0, 1.0f);
             redNum++;
         } else {
+            mSoundPool.play(greenSoundId, 1.0f, 1.0f, 1, 0, 1.0f);
             greenNum++;
         }
 
