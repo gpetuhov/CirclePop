@@ -47,8 +47,6 @@ public class Circle extends ImageView {
 
     private AnimatorSet mAnimatorSet;   // Animator set for circle movement
 
-    private PopSound mPopSound; // Play circle pop sounds
-
     private CircleActivity mCircleActivity;
 
     // Constructor for creating Circle programmatically
@@ -60,55 +58,62 @@ public class Circle extends ImageView {
     public Circle(Context context, AttributeSet attrs) {
         super(context, attrs);
         mCircleActivity = (CircleActivity) context;
+        gameStartInit();
+    }
 
+    private void gameStartInit() {
         // Set circle diameter (ImageView width and height)
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(RADIUS * 2, RADIUS * 2);
+//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(RADIUS * 2, RADIUS * 2);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(50, 50);
         setLayoutParams(params);
 
-        initCoordinatesRange();
+        max_X = mCircleActivity.screenWidth - (RADIUS * 2); // Calculate maximum coordinates so that circle doesn't fall out from screen
+        max_Y = mCircleActivity.screenHeight - (RADIUS * 2);
+
+        // Init counters
+        redHitNum = 0;
+        greenHitNum = 0;
         greenMissedNum = 0;
+
+        // Init movement
         moveDuration = MAX_MOVE_DURATION;
         moveDurationDivider = 1;
         greenNumAfterAcceleration = 0;
-        mPopSound = new PopSound(context);
-        initCircle();
-    }
 
-    // Detect maximum X and Y
-    private void initCoordinatesRange() {
-        max_X = mCircleActivity.screenWidth - (RADIUS * 2); // Calculate maximum coordinates so that circle doesn't fall out from screen
-        max_Y = mCircleActivity.screenHeight - (RADIUS * 2);
+        initCircle();
     }
 
     // Initialize new circle
     private void initCircle() {
-        if (greenMissedNum < MAX_GREEN_MISSED && redHitNum < MAX_RED_HIT) {
-            Random random = new Random();
+        Random random = new Random();
 
-            x = random.nextInt(max_X);  // Generate initial coordinates
-            y = random.nextInt(max_Y);
+        x = random.nextInt(max_X);  // Generate initial coordinates
+        y = random.nextInt(max_Y);
 
-            setX(x);    // Set initial coordinates
-            setY(y);
+        setX(x);    // Set initial coordinates
+        setY(y);
 
-            dest_X = random.nextInt(max_X); // Generate destination coordinates
-            dest_Y = random.nextInt(max_Y);
+        dest_X = random.nextInt(max_X); // Generate destination coordinates
+        dest_Y = random.nextInt(max_Y);
 
-            int z = 1 + random.nextInt(10); // Generate circle type (red or green)
-            mType = (z % 2) == 0;
+        int z = 1 + random.nextInt(10); // Generate circle type (red or green)
+        mType = (z % 2) == 0;
 
-            // Set circle color
-            if (mType == RED) {
-                setImageDrawable(getResources().getDrawable(R.drawable.red_circle));
-            }
-            if (mType == GREEN) {
-                greenNumAfterAcceleration++;
-                setImageDrawable(getResources().getDrawable(R.drawable.green_circle));
-            }
+        // Set circle color
+        if (mType == RED) {
+            setImageDrawable(getResources().getDrawable(R.drawable.red_circle));
+        }
+        if (mType == GREEN) {
+            greenNumAfterAcceleration++;
+            setImageDrawable(getResources().getDrawable(R.drawable.green_circle));
+        }
 
-            circleHit = CIRCLE_MISSED;  // Initially circle is missed
+        circleHit = CIRCLE_MISSED;  // Initially circle is missed
+    }
 
-            setVisibility(VISIBLE);
+    // Restart circle
+    public void circleRestart() {
+        if (greenMissedNum < MAX_GREEN_MISSED && redHitNum < MAX_RED_HIT) { // Check game over conditions
             startMovement();
         } else {
             gameEnd();
@@ -145,10 +150,10 @@ public class Circle extends ImageView {
     // Calculate number of circles hit
     private void countHitScore() {
         if (mType == RED) {
-            mPopSound.redPop();
+            mCircleActivity.mPopSound.redPop();
             redHitNum++;
         } else {
-            mPopSound.greenPop();
+            mCircleActivity.mPopSound.greenPop();
             greenHitNum++;
         }
     }
@@ -187,6 +192,7 @@ public class Circle extends ImageView {
                 countMissScore();
                 initMoveDuration();
                 initCircle();
+                circleRestart();
             }
 
             @Override

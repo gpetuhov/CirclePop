@@ -13,7 +13,7 @@
     </layouts>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0c7bbf30-f4ba-4a8d-a987-438e8b398231" name="Default" comment="">
@@ -43,13 +43,13 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/gpetuhov/android/circlepop/CircleActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="93" column="5" selection-start-line="93" selection-start-column="5" selection-end-line="93" selection-end-column="5" />
+              <caret line="66" column="11" selection-start-line="66" selection-start-column="11" selection-end-line="66" selection-end-column="11" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1335#1560#0" expanded="true" />
-                <element signature="e#1559#1560#0" expanded="true" />
-                <element signature="e#2064#2316#0" expanded="true" />
-                <element signature="e#2315#2316#0" expanded="true" />
+                <element signature="e#1449#1674#0" expanded="true" />
+                <element signature="e#1673#1674#0" expanded="true" />
+                <element signature="e#2178#2467#0" expanded="true" />
+                <element signature="e#2466#2467#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -58,9 +58,11 @@
       <file leaf-file-name="Circle.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/gpetuhov/android/circlepop/Circle.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.30054644">
-              <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-              <folding />
+            <state vertical-scroll-proportion="-1.2677596">
+              <caret line="60" column="24" selection-start-line="60" selection-start-column="24" selection-end-line="60" selection-end-column="24" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -1816,6 +1818,10 @@
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -1847,6 +1853,16 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="circlepop" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CirclePop" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -2303,10 +2319,10 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1335#1560#0" expanded="true" />
-            <element signature="e#1559#1560#0" expanded="true" />
-            <element signature="e#2064#2316#0" expanded="true" />
-            <element signature="e#2315#2316#0" expanded="true" />
+            <element signature="e#1449#1674#0" expanded="true" />
+            <element signature="e#1673#1674#0" expanded="true" />
+            <element signature="e#2178#2467#0" expanded="true" />
+            <element signature="e#2466#2467#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2315,7 +2331,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="104" column="32" selection-start-line="104" selection-start-column="32" selection-end-line="104" selection-end-column="32" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2354,10 +2372,10 @@
           <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1335#1560#0" expanded="true" />
-            <element signature="e#1559#1560#0" expanded="true" />
-            <element signature="e#2064#2316#0" expanded="true" />
-            <element signature="e#2315#2316#0" expanded="true" />
+            <element signature="e#1449#1674#0" expanded="true" />
+            <element signature="e#1673#1674#0" expanded="true" />
+            <element signature="e#2178#2467#0" expanded="true" />
+            <element signature="e#2466#2467#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2366,7 +2384,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2385,7 +2405,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.78142077">
           <caret line="55" column="4" selection-start-line="55" selection-start-column="4" selection-end-line="55" selection-end-column="4" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2410,16 +2432,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/gpetuhov/android/circlepop/PopSound.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.46448088">
-          <caret line="17" column="43" selection-start-line="17" selection-start-column="43" selection-end-line="17" selection-end-column="43" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.18072289">
@@ -2439,25 +2451,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/gpetuhov/android/circlepop/PopSound.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.46448088">
+          <caret line="17" column="43" selection-start-line="17" selection-start-column="43" selection-end-line="17" selection-end-column="43" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/gpetuhov/android/circlepop/CircleActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="93" column="5" selection-start-line="93" selection-start-column="5" selection-end-line="93" selection-end-column="5" />
+          <caret line="66" column="11" selection-start-line="66" selection-start-column="11" selection-end-line="66" selection-end-column="11" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1335#1560#0" expanded="true" />
-            <element signature="e#1559#1560#0" expanded="true" />
-            <element signature="e#2064#2316#0" expanded="true" />
-            <element signature="e#2315#2316#0" expanded="true" />
+            <element signature="e#1449#1674#0" expanded="true" />
+            <element signature="e#1673#1674#0" expanded="true" />
+            <element signature="e#2178#2467#0" expanded="true" />
+            <element signature="e#2466#2467#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/gpetuhov/android/circlepop/Circle.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.30054644">
-          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding />
+        <state vertical-scroll-proportion="-1.2677596">
+          <caret line="60" column="24" selection-start-line="60" selection-start-column="24" selection-end-line="60" selection-end-column="24" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

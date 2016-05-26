@@ -26,12 +26,16 @@ public class CircleActivity extends AppCompatActivity {
     public int screenWidth;     // Screen size
     public int screenHeight;
 
+    public PopSound mPopSound; // Play circle pop sounds
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_circle);
 
         getScreenSize();
+
+        mPopSound = new PopSound(CircleActivity.this);
 
         mMainLayout = (LinearLayout) findViewById(R.id.main_layout);
 
@@ -57,7 +61,7 @@ public class CircleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mScoreLayout.setVisibility(View.GONE);
-                mMainLayout.removeView(mCircle);
+                mMainLayout.removeView(mCircle);    // Remove circle from main layout
                 createCircle();
             }
         });
@@ -66,8 +70,8 @@ public class CircleActivity extends AppCompatActivity {
     // Create circle and add to main layout
     private void createCircle() {
         mCircle = new Circle(CircleActivity.this);  // Create circle
-        mCircle.setVisibility(View.INVISIBLE);      // Make circle invisible until fully initialized
         mMainLayout.addView(mCircle);               // Add circle to main layout
+        mCircle.circleRestart();
     }
 
     // Calculate screen size
