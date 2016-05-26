@@ -1,6 +1,5 @@
 package com.gpetuhov.android.circlepop;
 
-import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,91 +7,72 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class CircleActivity extends AppCompatActivity {
-    private Circle mCircle;     // All circles are generated into one Circle object
-
-    private Button mStartButton;
-
-    private TextView mGameOverTextView;
-    private TextView mGreenHitTextView;
-    private TextView mGreenMissedTextView;
-    private TextView mRedHitTextView;
-    private Button mPlayAgainButton;
-
-    public int screenWidth;     // Screen size
-    public int screenHeight;
-
-    public PopSound mPopSound; // Play circle pop sounds
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_intro);
+        setContentView(R.layout.activity_intro);    // Initially create activity with intro layout
 
-        getScreenSize();
-
-        mPopSound = new PopSound(CircleActivity.this);
-
-        mStartButton = (Button) findViewById(R.id.start_button);
-        mStartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gameStart();
-            }
-        });
+        Button startButton = (Button) findViewById(R.id.start_button);
+        if (startButton != null) {
+            startButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    gameStart();
+                }
+            });
+        }
     }
 
-    // Calculate screen size
-    private void getScreenSize() {
-        Point point = new Point();  // Stores screen size
-        getWindowManager().getDefaultDisplay().getSize(point); // Get screen size
-
-        screenWidth = point.x;
-        screenHeight = point.y;
-    }
-
+    // Set layout with circle and start game
     private void gameStart() {
         setContentView(R.layout.activity_circle);
 
-        mCircle = (Circle) findViewById(R.id.circle);
-        mCircle.startMovement();
+        Circle circle = (Circle) findViewById(R.id.circle); // All circles are generated into one Circle object
+        if (circle != null) {
+            circle.startMovement();    // Start circle movement (start game)
+        }
     }
 
-    private void gameEndInit() {
+    // Set layout with score and display results
+    public void gameEnd(int greenHitNum, int greenMissedNum, int redHitNum, int maxGreenMissed, int maxRedHit) {
         setContentView(R.layout.activity_score);
 
-        mGameOverTextView = (TextView) findViewById(R.id.gameover_textview);
-        mGreenHitTextView = (TextView) findViewById(R.id.greenhit_textview);
-        mGreenMissedTextView = (TextView) findViewById(R.id.greenmissed_textview);
-        mRedHitTextView = (TextView) findViewById(R.id.redhit_textview);
+        TextView gameOverTextView = (TextView) findViewById(R.id.gameover_textview);
+        TextView greenHitTextView = (TextView) findViewById(R.id.greenhit_textview);
+        TextView greenMissedTextView = (TextView) findViewById(R.id.greenmissed_textview);
+        TextView redHitTextView = (TextView) findViewById(R.id.redhit_textview);
 
-        mPlayAgainButton = (Button) findViewById(R.id.play_again_button);
-        mPlayAgainButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gameStart();
+        Button playAgainButton = (Button) findViewById(R.id.play_again_button);
+        if (playAgainButton != null) {
+            playAgainButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    gameStart();
+                }
+            });
+        }
+
+        if (gameOverTextView != null) {
+            if (greenMissedNum == maxGreenMissed) { // Game over due to green circles missed
+                gameOverTextView.setText("Game over: you missed " + maxGreenMissed + " green circles!");
             }
-        });
-    }
+            if (redHitNum == maxRedHit) {   // Game over due to red circles hit
+                gameOverTextView.setText("Game over: you hit " + maxRedHit + " red circles!");
+            }
+        }
 
-    // Game over due to green circles missed
-    public void gameEndGreenMissed() {
-        gameEndInit();
-        mGameOverTextView.setText("Game over: you missed " + mCircle.MAX_GREEN_MISSED + " green circles!");
-        setScoreText();
-    }
+        if (greenHitTextView != null) {
+            greenHitTextView.setText("Green circles hit: " + greenHitNum);
+        }
 
-    // Game over due to red circles hit
-    public void gameEndRedHit() {
-        gameEndInit();
-        mGameOverTextView.setText("Game over: you hit " + mCircle.MAX_RED_HIT + " red circles!");
-        setScoreText();
-    }
+        if (greenMissedTextView != null) {
+            greenMissedTextView.setText("Green circles missed: " + greenMissedNum);
+        }
 
-    // Set text in TextViews on Your Score Layout
-    private void setScoreText() {
-        mGreenHitTextView.setText("Green circles hit: " + mCircle.getGreenHitNum());
-        mGreenMissedTextView.setText("Green circles missed: " + mCircle.getGreenMissedNum());
-        mRedHitTextView.setText("Red circles hit: " + mCircle.getRedHitNum());
+        if (redHitTextView != null) {
+            redHitTextView.setText("Red circles hit: " + redHitNum);
+        }
     }
 }
 

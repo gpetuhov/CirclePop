@@ -3,12 +3,13 @@ package com.gpetuhov.android.circlepop;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import java.util.Random;
 
@@ -26,10 +27,14 @@ public class Circle extends ImageView {
 
     private int x;  // Initial coordinates
     private int y;
+
     private boolean mType;  //true - RED; false - GREEN
 
     private int dest_X; // Destination coordinates
     private int dest_Y;
+
+    public int screenWidth;     // Screen size
+    public int screenHeight;
 
     private int max_X;  // Maximum coordinates
     private int max_Y;
@@ -37,9 +42,9 @@ public class Circle extends ImageView {
     private int redHitNum; // Number of red circles hit
     private int greenHitNum; // Number of green circles hit
 
-    private boolean circleHit;  // true - circle hit, false - circle missed
-
     private int greenMissedNum; // Number of green circles missed
+
+    private boolean circleHit;  // true - circle hit, false - circle missed
 
     private int moveDuration;               // Duration of circle movement on screen (circle time to live)
     private float moveDurationDivider;      // Used in calculating new moveDuration
@@ -47,28 +52,31 @@ public class Circle extends ImageView {
 
     private AnimatorSet mAnimatorSet;   // Animator set for circle movement
 
-    private CircleActivity mCircleActivity;
+    public PopSound mPopSound; // Play circle pop sounds
 
-    // Constructor for creating Circle programmatically
-    public Circle(Context context) {
-        this(context, null);
-    }
+    private CircleActivity mCircleActivity; // Calling activity
 
-    // Constructor for using Circle in XML
     public Circle(Context context, AttributeSet attrs) {
         super(context, attrs);
         mCircleActivity = (CircleActivity) context;
+        mPopSound = new PopSound(context);
+        getScreenSize(context);
         gameStartInit();
     }
 
-    private void gameStartInit() {
-        // Set circle diameter (ImageView width and height)
-//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(RADIUS * 2, RADIUS * 2);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(50, 50);
-        setLayoutParams(params);
+    // Calculate screen size
+    private void getScreenSize(Context context) {
+        Point point = new Point();  // Stores screen size
+        ((Activity) context).getWindowManager().getDefaultDisplay().getSize(point); // Get screen size
 
-        max_X = mCircleActivity.screenWidth - (RADIUS * 2); // Calculate maximum coordinates so that circle doesn't fall out from screen
-        max_Y = mCircleActivity.screenHeight - (RADIUS * 2);
+        screenWidth = point.x;
+        screenHeight = point.y;
+    }
+
+    // Initialization on game start
+    private void gameStartInit() {
+        max_X = screenWidth - (RADIUS * 2); // Calculate maximum coordinates so that circle doesn't fall out from screen
+        max_Y = screenHeight - (RADIUS * 2);
 
         // Init counters
         redHitNum = 0;
@@ -116,19 +124,7 @@ public class Circle extends ImageView {
         if (greenMissedNum < MAX_GREEN_MISSED && redHitNum < MAX_RED_HIT) { // Check game over conditions
             startMovement();
         } else {
-            gameEnd();
-        }
-    }
-
-    // Game over
-    private void gameEnd() {
-        setVisibility(GONE);
-
-        if (greenMissedNum == MAX_GREEN_MISSED) {
-            mCircleActivity.gameEndGreenMissed();
-        }
-        if (redHitNum == MAX_RED_HIT) {
-            mCircleActivity.gameEndRedHit();
+            mCircleActivity.gameEnd(greenHitNum, greenMissedNum, redHitNum, MAX_GREEN_MISSED, MAX_RED_HIT);
         }
     }
 
@@ -150,10 +146,10 @@ public class Circle extends ImageView {
     // Calculate number of circles hit
     private void countHitScore() {
         if (mType == RED) {
-            mCircleActivity.mPopSound.redPop();
+            mPopSound.redPop();
             redHitNum++;
         } else {
-            mCircleActivity.mPopSound.greenPop();
+            mPopSound.greenPop();
             greenHitNum++;
         }
     }
@@ -222,17 +218,5 @@ public class Circle extends ImageView {
         }
 
         moveDuration = (int) (MAX_MOVE_DURATION / moveDurationDivider);
-    }
-
-    public int getRedHitNum() {
-        return redHitNum;
-    }
-
-    public int getGreenHitNum() {
-        return greenHitNum;
-    }
-
-    public int getGreenMissedNum() {
-        return greenMissedNum;
     }
 }
