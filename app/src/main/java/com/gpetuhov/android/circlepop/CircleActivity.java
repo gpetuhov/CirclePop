@@ -9,9 +9,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class CircleActivity extends AppCompatActivity {
-    private Circle mCircle;
+    private Circle mCircle;     // All circles are generated into one Circle object
 
-    private LinearLayout mMainLayout;
+    private LinearLayout mMainLayout;   // Main layout
 
     private LinearLayout mIntroLayout;  // Intro screen
     private Button mStartButton;
@@ -23,7 +23,7 @@ public class CircleActivity extends AppCompatActivity {
     private TextView mRedHitTextView;
     private Button mPlayAgainButton;
 
-    public int screenWidth;
+    public int screenWidth;     // Screen size
     public int screenHeight;
 
     @Override
@@ -79,18 +79,21 @@ public class CircleActivity extends AppCompatActivity {
         screenHeight = point.y;
     }
 
+    // Game over due to green circles missed
     public void gameEndGreenMissed() {
         mGameOverTextView.setText("Game over: you missed " + mCircle.MAX_GREEN_MISSED + " green circles!");
         setScoreText();
         mScoreLayout.setVisibility(View.VISIBLE);
     }
 
+    // Game over due to red circles hit
     public void gameEndRedHit() {
         mGameOverTextView.setText("Game over: you hit " + mCircle.MAX_RED_HIT + " red circles!");
         setScoreText();
         mScoreLayout.setVisibility(View.VISIBLE);
     }
 
+    // Set text in TextViews on Your Score Layout
     private void setScoreText() {
         mGreenHitTextView.setText("Green circles hit: " + mCircle.getGreenHitNum());
         mGreenMissedTextView.setText("Green circles missed: " + mCircle.getGreenMissedNum());

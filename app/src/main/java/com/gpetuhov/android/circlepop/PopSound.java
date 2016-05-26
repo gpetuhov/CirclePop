@@ -14,8 +14,10 @@ public class PopSound {
 
     public PopSound(Context context) {
         mSoundPool = new SoundPool(MAX_SOUNDS, AudioManager.STREAM_MUSIC, 0);
-        greenSoundId = mSoundPool.load(context, R.raw.green_pop, 1);
-        redSoundId = mSoundPool.load(context, R.raw.red_pop, 1);
+
+        // Sounds are located in raw folder
+        greenSoundId = mSoundPool.load(context, R.raw.green_pop, 1);    // Load green pop sound
+        redSoundId = mSoundPool.load(context, R.raw.red_pop, 1);        // Load green red sound
     }
 
     // Play red pop sound
