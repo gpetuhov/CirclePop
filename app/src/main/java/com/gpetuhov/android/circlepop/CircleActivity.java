@@ -1,6 +1,5 @@
 package com.gpetuhov.android.circlepop;
 
-import android.app.Activity;
 import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class CircleActivity extends AppCompatActivity {
     private Circle mCircle;
@@ -99,3 +97,5 @@ public class CircleActivity extends AppCompatActivity {
         mRedHitTextView.setText("Red circles hit: " + mCircle.getRedHitNum());
     }
 }
+
+// Application icon created with the Android Asset Studio: https://romannurik.github.io/AndroidAssetStudio/
