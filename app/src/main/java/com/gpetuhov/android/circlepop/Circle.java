@@ -16,7 +16,7 @@ import java.util.Random;
 public class Circle extends ImageView {
     public static final boolean RED = true;
     public static final boolean GREEN = false;
-    public static final int RADIUS = 100;
+    public static final int MARGIN = 200;   // Offset from screen edge
     public static final int MAX_MOVE_DURATION = 3000;   // Initial circle move duration
     public static final int MAX_GREEN_CIRCLES_AFTER_ACCELERATION = 2;   // Move duration decreases every MAX_GREEN_CIRCLES_AFTER_ACCELERATION green circles
     public static final float ACCELERATION_INCREMENT = 0.5f;    // Used in calculating new move duration
@@ -75,8 +75,8 @@ public class Circle extends ImageView {
 
     // Initialization on game start
     private void gameStartInit() {
-        max_X = screenWidth - (RADIUS * 2); // Calculate maximum coordinates so that circle doesn't fall out from screen
-        max_Y = screenHeight - (RADIUS * 2);
+        max_X = screenWidth - MARGIN; // Calculate maximum coordinates so that circle doesn't fall out from screen
+        max_Y = screenHeight - MARGIN;
 
         // Init counters
         redHitNum = 0;
@@ -119,7 +119,7 @@ public class Circle extends ImageView {
         circleHit = CIRCLE_MISSED;  // Initially circle is missed
     }
 
-    // Restart circle
+    // Restart circle or end game depending on game over conditions
     public void circleRestart() {
         if (greenMissedNum < MAX_GREEN_MISSED && redHitNum < MAX_RED_HIT) { // Check game over conditions
             startMovement();
@@ -129,7 +129,7 @@ public class Circle extends ImageView {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {    // Circle hit
+    public boolean onTouchEvent(MotionEvent event) {    // User hits circle
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             popCircle();
         }
@@ -143,7 +143,7 @@ public class Circle extends ImageView {
         stopMovement();
     }
 
-    // Calculate number of circles hit
+    // Calculate number of circles hit and play pop sound
     private void countHitScore() {
         if (mType == RED) {
             mPopSound.redPop();
@@ -194,6 +194,7 @@ public class Circle extends ImageView {
             @Override
             public void onAnimationCancel(Animator animation) {
                 // onAnimationCancel is called only when circle is hit (when we force circle to stop)
+                // onAnimationEnd is called after onAnimationCancel
                 countHitScore();
             }
 
@@ -206,10 +207,10 @@ public class Circle extends ImageView {
     }
 
     private void stopMovement() {
-        mAnimatorSet.cancel();  // Call onAnimationCancel
+        mAnimatorSet.cancel();  // Stop circle movement by calling onAnimationCancel
     }
 
-    // Calculate new move duration
+    // Calculate new move duration (speed up game)
     private void initMoveDuration() {
         // Move duration decreases every time when we generate MAX_GREEN_CIRCLES_AFTER_ACCELERATION after previous duration decrease
         if (greenNumAfterAcceleration == MAX_GREEN_CIRCLES_AFTER_ACCELERATION) {
