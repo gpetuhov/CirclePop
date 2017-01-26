@@ -1,8 +1,6 @@
 # CirclePop
-Game for Android.
+Game for Android. Pop green circles, avoid red circles.
 
-Pop green circles, avoid red circles.
+Download from Google Play:
 
-IDE: Android Studio 2.1
-
-MinSDK: 16
+https://play.google.com/store/apps/details?id=com.gpetuhov.android.circlepop
